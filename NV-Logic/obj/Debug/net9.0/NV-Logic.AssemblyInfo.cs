@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NV-Logic")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+befa7671e59cb9a3283aa0a59c7b11cc163baee0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bc668f885b23b4790f47f4fbf1ca11c429c29d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("NV-Logic")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NV-Logic")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
