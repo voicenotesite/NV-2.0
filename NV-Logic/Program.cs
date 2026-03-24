@@ -1,49 +1,74 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-class Program
+namespace NV2_Project
 {
-    // Definicja 4 głównych potęg świata NV-2.0
-    static string[] Factions = { "Neon Order", "Rust Marauders", "Silicon Cult", "Void Seekers" };
-    static List<string> ActiveNPCs = new List<string>();
-
-    static void Main()
+    class Program
     {
-        Console.Title = "NV-2.0 | ENGINE LOGIC";
-        Console.WriteLine("--- NV-2.0: SYSTEM FRAKCJI AKTYWNY ---");
-        
-        Random rng = new Random();
-
-        // Symulujemy rozwój świata przez pierwsze 60 dni
-        for (int day = 1; day <= 60; day++) 
+        static async Task Main(string[] args)
         {
-            // Mechanika Bartosza: Nowy bot pojawia się co 10 dni
-            if (day % 10 == 0)
+            Console.Title = "NV-2.0 CORE ENGINE | Dysk G:";
+            Console.Clear();
+
+            // Nagłówek systemowy
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("====================================================");
+            Console.WriteLine("          NV-2.0: SYSTEM OPERACYJNY GILDII          ");
+            Console.WriteLine("====================================================");
+            Console.ResetColor();
+
+            // Definicja 4 Głównych Frakcji
+            string[] frakcje = { 
+                "NEON ORDER", 
+                "SILICON CULT", 
+                "BIO-HACKERS", 
+                "VOID RUNNERS" 
+            };
+
+            int totalCredits = 0;
+            Random rng = new Random();
+
+            Console.WriteLine($"\n[SYSTEM] Inicjalizacja na 12 rdzeniach Ryzena...");
+            await Task.Delay(1000);
+
+            // Aktywacja Liderów
+            foreach (var f in frakcje)
             {
-                int botNumber = day / 10;
-                string assignedFaction;
-
-                if (botNumber <= 4)
-                {
-                    // Pierwsza czwórka to LIDERZY (każdy dostaje swoją gildię)
-                    assignedFaction = Factions[botNumber - 1];
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"[DZIEŃ {day}] POWSTAŁ LIDER: Bot #{botNumber} zakłada {assignedFaction}!");
-                }
-                else
-                {
-                    // Każdy kolejny to REKRUT - Totalny Random dołącza do jednej z gildii
-                    assignedFaction = Factions[rng.Next(0, 4)];
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"[DZIEŃ {day}] REKRUT: Bot #{botNumber} dołącza do {assignedFaction} (Total Random)");
-                }
-                
-                ActiveNPCs.Add($"Bot_{botNumber}@{assignedFaction}");
-                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"[LIDER] Frakcja: {f} -> STATUS: AKTYWNA");
+                await Task.Delay(300);
             }
-        }
 
-        Console.WriteLine("\n--- AKTUALNY STAN ŚWIATA NV-2.0 ---");
-        foreach(var npc in ActiveNPCs) Console.WriteLine(npc);
+            Console.ResetColor();
+            Console.WriteLine("\n----------------------------------------------------");
+            Console.WriteLine("[PROTOKÓŁ] Rozpoczynam generowanie zleceń (Bounties)...");
+            Console.WriteLine("----------------------------------------------------\n");
+
+            // Główna pętla symulacji Bounty
+            for (int cykl = 1; cykl <= 10; cykl++)
+            {
+                int nagroda = rng.Next(100, 501);
+                string łowca = frakcje[rng.Next(frakcje.Length)];
+                
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"[CYKL {cykl:D2}] ");
+                Console.ResetColor();
+                Console.WriteLine($"{łowca} zlikwidował bota! Nagroda: +{nagroda} NV-Credits");
+
+                totalCredits += nagroda;
+                await Task.Delay(800); // Szybka symulacja akcji
+            }
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n----------------------------------------------------");
+            Console.WriteLine($"[RAPORT FINALNY] Zebrano łącznie: {totalCredits} NV-Credits");
+            Console.WriteLine("[INFO] Odliczanie do 10. dnia (Event: Bounty Hunt) TRWA.");
+            Console.WriteLine("----------------------------------------------------");
+            Console.ResetColor();
+            
+            Console.WriteLine("\nNaciśnij dowolny klawisz, aby zakończyć sesję...");
+            Console.ReadKey();
+        }
     }
 }
