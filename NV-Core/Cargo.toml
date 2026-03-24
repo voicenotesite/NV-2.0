@@ -1,9 +1,11 @@
 [package]
-name = "nv-core"
+name = "nv_core"
 version = "0.1.0"
-authors = ["Bartosz Osiej"]
 edition = "2021"
 
 [lib]
 name = "nv_core"
 crate-type = ["cdylib"]
+
+[dependencies]
+libc = "0.2"
