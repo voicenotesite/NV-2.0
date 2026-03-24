@@ -1,84 +1,102 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices; // KLUCZOWE: Do rozmowy z Rustem
-using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.IO;
 
-namespace NV2_Project
+namespace NV2_Final
 {
-    class Program
-    {
-        // IMPORT Z RUSTA (Musi pasować do nazw w lib.rs)
-        [DllImport("nv_core.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double calculate_combat_power(int bots, int power_level, double treasury);
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vertex {
+        public float X, Y, Z;
+    }
 
-        [DllImport("nv_core.dll", CallingConvention = CallingConvention.Cdecl)]
+    public class EngineWindow : Form
+    {
+        // Importy z wymuszonymi nazwami (EntryPoint)
+        [DllImport("nv_core.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "check_core_status")]
         public static extern void check_core_status();
 
-        static async Task Main(string[] args)
+        [DllImport("nv_core.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "get_cube_edges")]
+        public static extern void get_cube_edges(float x, float y, float z, [Out] Vertex[] vertices);
+
+        private Label statusLabel;
+        private Button actionButton;
+
+        public EngineWindow()
         {
-            Console.Title = "NV-2.0 CORE HYBRID | C# + RUST";
-            
-            // Inicjalizacja Core
-            try {
-                check_core_status(); 
-            } catch (Exception e) {
-                Console.WriteLine($"[BŁĄD] Nie znaleziono nv_core.dll! {e.Message}");
-            }
+            this.Text = "NV-2.0 ENGINE | 3D PROTOCOL | CORE: RUST";
+            this.Size = new Size(800, 600);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = Color.FromArgb(15, 15, 15);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            var factions = new List<Faction>
-            {
-                new Faction { Name = "NEON ORDER" },
-                new Faction { Name = "SILICON CULT" },
-                new Faction { Name = "BIO-HACKERS" },
-                new Faction { Name = "VOID RUNNERS" }
+            statusLabel = new Label {
+                Text = "ŁADOWANIE SILNIKA...",
+                ForeColor = Color.Yellow,
+                Font = new Font("Consolas", 11, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(20, 20)
             };
+            this.Controls.Add(statusLabel);
 
-            bool running = true;
-            Random rng = new Random();
+            actionButton = new Button {
+                Text = "POBIERZ DANE 3D Z RUSTA",
+                Size = new Size(220, 45),
+                Location = new Point(20, 60),
+                FlatStyle = FlatStyle.Flat,
+                ForeColor = Color.Cyan
+            };
+            actionButton.FlatAppearance.BorderColor = Color.Cyan;
+            actionButton.Click += OnActionClick;
+            this.Controls.Add(actionButton);
 
-            while (running)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("====================================================");
-                Console.WriteLine("          NV-2.0: HYBRYDOWY SILNIK DECYZYJNY        ");
-                Console.WriteLine("====================================================");
-                Console.ResetColor();
+            InitEngine();
+        }
 
-                Console.WriteLine($"{"FRAKCJA",-15} | {"BOTY",-6} | {"SKARBIEC",-10} | {"MOC (RUST)"}");
-                Console.WriteLine(new string('-', 60));
-
-                foreach (var f in factions)
-                {
-                    // WYWOŁANIE RUSTA: Tu dzieje się magia!
-                    double rustPower = calculate_combat_power(f.BotCount, f.PowerLevel, (double)f.Treasury);
-                    
-                    Console.WriteLine($"{f.Name,-15} | {f.BotCount,-6} | {f.Treasury,8:N2} | {rustPower,8:N2} CP");
+        private void InitEngine()
+        {
+            try {
+                // Ręczne sprawdzenie ścieżki dla pewności
+                string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "nv_core.dll");
+                if (File.Exists(dllPath)) {
+                    NativeLibrary.Load(dllPath); 
+                    check_core_status();
+                    statusLabel.Text = "SYSTEM STABLE | RUST BRIDGE: OK";
+                    statusLabel.ForeColor = Color.Lime;
+                } else {
+                    statusLabel.Text = "BŁĄD: BRAK NV_CORE.DLL W FOLDERZE BIN!";
+                    statusLabel.ForeColor = Color.Red;
                 }
-
-                Console.WriteLine("\n[KOMENDY]: 'recruit [nazwa]', 'bounty', 'exit'");
-                Console.Write("\n> ");
-                string input = Console.ReadLine()?.ToLower() ?? "";
-
-                if (input == "exit") { running = false; }
-                else if (input == "bounty")
-                {
-                    var winner = factions[rng.Next(factions.Count)];
-                    decimal prize = (decimal)(rng.NextDouble() * 500 + 100);
-                    winner.AddBounty(prize);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"\n[BOUNTY] {winner.Name} zgarnia {prize:N2} NV-Credits!");
-                    Console.ResetColor();
-                    await Task.Delay(1000);
-                }
-                else if (input.StartsWith("recruit "))
-                {
-                    string name = input.Replace("recruit ", "").ToUpper();
-                    var f = factions.FirstOrDefault(x => x.Name.Contains(name));
-                    if (f != null) { f.Recruit(5); }
-                }
+            } catch (Exception ex) {
+                statusLabel.Text = "BŁĄD DLL: " + ex.Message;
+                statusLabel.ForeColor = Color.Red;
             }
+        }
+
+        private void OnActionClick(object? sender, EventArgs e)
+        {
+            Vertex[] cube = new Vertex[8];
+            get_cube_edges(0, 0, 0, cube);
+            
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Wierzchołki pobrane pomyślnie z Rusta:");
+            foreach (var v in cube)
+                sb.AppendLine($"X:{v.X} Y:{v.Y} Z:{v.Z}");
+
+            MessageBox.Show(sb.ToString(), "Debug Silnika");
+        }
+    }
+
+    class Program
+    {
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new EngineWindow());
         }
     }
 }

@@ -1,0 +1,15 @@
+G:\NV-PROJECT\NV-2.0\NV-Logic\bin\Debug\net9.0-windows\NV-Logic.exe
+G:\NV-PROJECT\NV-2.0\NV-Logic\bin\Debug\net9.0-windows\NV-Logic.deps.json
+G:\NV-PROJECT\NV-2.0\NV-Logic\bin\Debug\net9.0-windows\NV-Logic.runtimeconfig.json
+G:\NV-PROJECT\NV-2.0\NV-Logic\bin\Debug\net9.0-windows\NV-Logic.dll
+G:\NV-PROJECT\NV-2.0\NV-Logic\bin\Debug\net9.0-windows\NV-Logic.pdb
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.GeneratedMSBuildEditorConfig.editorconfig
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.AssemblyInfoInputs.cache
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.AssemblyInfo.cs
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.csproj.CoreCompileInputs.cache
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.sourcelink.json
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.dll
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\refint\NV-Logic.dll
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.pdb
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\NV-Logic.genruntimeconfig.cache
+G:\NV-PROJECT\NV-2.0\NV-Logic\obj\Debug\net9.0-windows\ref\NV-Logic.dll
